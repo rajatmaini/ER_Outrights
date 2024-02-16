@@ -12,8 +12,8 @@ def is_third_monday_in_expiry_month(date_str):
     else:
         False
 
-from_date = "2020-11-02"
-to_date = "2021-04-01"
+from_date = "2015-11-17"
+to_date = "2015-12-29"
 prices_path = "ER_Outrights_daily.csv"
 anti_roll_path = f'calculation\AllocationDataAntiRoll_{from_date}_{to_date}.csv'
 roll_path = f'calculation\AllocationDataRoll_{from_date}_{to_date}.csv'
@@ -46,6 +46,7 @@ def anti_roll():
                     else:
                         profit = (prices_1[j-18]-prices_2[j-19])*allocation_list[j]*100
                         profit_perday.append(profit)
+            print(profit_perday)
         else:
             for j in range(1,len(allocation_list)):
                 if(j<=18):

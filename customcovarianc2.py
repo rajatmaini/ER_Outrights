@@ -1,6 +1,7 @@
 import pandas as pd
 import pypfopt
 from datetime import datetime,timedelta
+import numpy
 file_path = "ER_Outrights_daily.csv"
 
 def is_third_monday_in_expiry_month(date_str):
@@ -31,10 +32,10 @@ def customcovarinace(row):
                 row.append(prices[j])
         total_returns.append(row)
     print(total_returns[0])
-    total_returns_df = pd.DataFrame(total_returns,columns=['Date', 'FEIcm1', 'FEIcm2', 'FEIcm3', 'FEIcm4', 'FEIcm5', 'FEIcm6', 'FEIcm7', 'FEIcm8', 'FEIcm9', 'FEIcm10', 'FEIcm11', 'FEIcm12', 'FEIcm13', 'FEIcm14', 'FEIcm15', 'FEIcm16', 'FEIcm17', 'FEIcm18']
+    total_returns_df = pd.DataFrame(total_returns,columns=['Date','FEIcm1', 'FEIcm2', 'FEIcm3', 'FEIcm4', 'FEIcm5', 'FEIcm6', 'FEIcm7', 'FEIcm8', 'FEIcm9', 'FEIcm10', 'FEIcm11', 'FEIcm12', 'FEIcm13', 'FEIcm14', 'FEIcm15', 'FEIcm16', 'FEIcm17', 'FEIcm18']
     )
-    total_returns_df.drop('Date',axis=1,inplace=True)
-    cov = pypfopt.risk_models.CovarianceShrinkage(total_returns_df).ledoit_wolf("constant_variance")
+    total_returns_df.drop("Date",axis=1,inplace=True)
+    cov = pypfopt.risk_models.risk_matrix(total_returns_df,"sample_cov",returns_data=True,frequency=1)
     cov_matrix = cov.values.tolist()
     cov_matrix_copy = []
     for i in range(len(cov_matrix)):
@@ -70,7 +71,7 @@ def customcovarinace_roll(row):
     total_returns_df = pd.DataFrame(total_returns,columns=['Date','FEIcm2', 'FEIcm3', 'FEIcm4', 'FEIcm5', 'FEIcm6', 'FEIcm7', 'FEIcm8', 'FEIcm9', 'FEIcm10', 'FEIcm11', 'FEIcm12', 'FEIcm13', 'FEIcm14', 'FEIcm15', 'FEIcm16', 'FEIcm17','FEIcm18','FEIcm19']
     )
     total_returns_df.drop('Date',axis=1,inplace=True)
-    cov = pypfopt.risk_models.CovarianceShrinkage(total_returns_df).ledoit_wolf("constant_variance")
+    cov = pypfopt.risk_models.risk_matrix(total_returns_df,"sample_cov",returns_data=True,frequency=1)
     cov_matrix = cov.values.tolist()
     cov_matrix_copy = []
     for i in range(len(cov_matrix)):
@@ -87,5 +88,3 @@ def customcovarinace_roll(row):
 ,columns=['FEIcm2', 'FEIcm3', 'FEIcm4', 'FEIcm5', 'FEIcm6', 'FEIcm7', 'FEIcm8', 'FEIcm9', 'FEIcm10', 'FEIcm11', 'FEIcm12', 'FEIcm13', 'FEIcm14', 'FEIcm15', 'FEIcm16', 'FEIcm17', 'FEIcm18','FEIcm19','Inverse of FEIcm2', 'Inverse of FEIcm3', 'Inverse of FEIcm4', 'Inverse of FEIcm5', 'Inverse of FEIcm6', 'Inverse of FEIcm7', 'Inverse of FEIcm8', 'Inverse of FEIcm9', 'Inverse of FEIcm10', 'Inverse of FEIcm11', 'Inverse of FEIcm12', 'Inverse of FEIcm13', 'Inverse of FEIcm14', 'Inverse of FEIcm15', 'Inverse of FEIcm16', 'Inverse of FEIcm17', 'Inverse of FEIcm18','Inverse of FEIcm19'])
     cov_matrix_copy_df.to_csv("test_custom_cov.csv")
     return cov_matrix_copy_df
-
-customcovarinace_roll(1731)
